@@ -1,0 +1,92 @@
+Welcome to OmniInsights! This guide is your central resource for using our Salesforce-powered Slack assistant. Our goal is to empower you with instant access to campaign analytics, data quality insights, and self-service support, directly within Slack.
+
+1. Getting Started: Your First 60 Seconds
+Find the Bot: In any relevant Slack channel (e.g., #campaign-analytics, #sales-operations), you can interact with the bot.
+
+Check for Help: Type /omni-help and press Enter. The bot will respond with a list of available commands.
+
+Run Your First Query: Try pulling data for a recent campaign. Type /campaign <Your Campaign Name> (e.g., /campaign Q2 Summer Sale).2. Detailed Command Reference
+/campaign <campaign_name>
+Purpose: Retrieves live performance metrics for a specific Salesforce campaign.
+
+How to Use:
+
+Syntax: /campaign [search term for campaign name]
+
+Example: /campaign 2024 Partner Conference
+
+Expected Response: A formatted card showing key metrics like:
+
+Status (e.g., In Progress, Completed)
+
+Actual Cost vs. Budgeted Cost
+
+Won Revenue (from associated opportunities)
+
+Return on Investment (ROI)
+
+Lead Count and Conversion Rate
+Troubleshooting:
+
+“No campaigns found”: Try using a broader search term. The command uses a partial match.
+
+“Unable to connect to Salesforce”: This is a temporary system issue. Please try again in a few minutes or use /escalate if it persists.
+
+/dq-scan
+Purpose: Performs an on-demand data quality audit of recent Salesforce records (Accounts and Opportunities).
+
+How to Use:
+
+Syntax: /dq-scan (no arguments needed)
+
+Expected Response: A summary report that includes:
+
+Number of records with missing critical data (e.g., phone numbers, billing addresses).
+
+Number of records with potential outlier values (e.g., unusually high revenue).
+
+An overall Data Quality Score (%).
+
+Troubleshooting:
+
+The scan covers records created in the last 30 days. For older data issues, please contact the Data Governance team.
+
+/escalate <your issue description>
+Purpose: Formally logs a support request when self-service commands are not sufficient. This creates a notification in the #support-queue channel for the support team.
+
+How to Use:
+
+Syntax: /escalate [a clear, concise description of your problem]
+
+Example: /escalate The ROI for the 'Global Summit' campaign seems incorrect. The cost is showing as $0.
+
+Expected Response: A confirmation message: "🔔 Your issue has been logged and escalated to the support team."
+
+/omni-help
+Purpose: Displays a quick reference guide with all available commands and a link to this full Knowledge Base document.
+
+How to Use:
+
+Syntax: /omni-help
+
+Expected Response: A help card with a summary of commands.
+
+3. Understanding the Metrics
+Return on Investment (ROI %): This shows how much profit was generated from the campaign relative to its cost. The formula is ((Won Revenue - Actual Cost) / Actual Cost) * 100. A positive ROI means the campaign was profitable.
+
+Conversion Rate (%): This is the percentage of leads that became converted contacts. The formula is (Number of Converted Leads / Total Number of Leads) * 100. It measures how effectively the campaign turns interest into qualified leads.
+
+Data Quality Score (%): This score represents the overall health of your recent data. It starts at 100% and decreases based on the number of detected issues (missing fields, outliers). A score below 90% may require attention.
+
+4. Frequently Asked Questions (FAQ)
+Q: How up-to-date is the data from the /campaign command?
+A: It is real-time. The bot queries Salesforce at the exact moment you run the command.
+
+Q: Who can see the results of my commands?
+A: The bot's response is only visible to you unless you run it in a public channel, in which case all members of that channel can see it.
+
+Q: What should I do if the Data Quality Score from /dq-scan is very low?
+A: Use the /escalate command to notify the Data Governance team. Mention the low score and the date of the scan. Example: /escalate Data quality score is at 75% after today's scan. Please investigate.
+
+Q: Can I schedule a recurring /dq-scan?
+A: Not at this time. This feature is on our product roadmap. For now, scans are on-demand.
