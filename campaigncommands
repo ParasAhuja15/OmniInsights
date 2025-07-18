@@ -1,0 +1,45 @@
+@app.command("/campaign")
+def handle_campaign_command(ack, respond, command):
+    ack()
+    campaign_name = command.get("text", "").strip()
+    if not campaign_name:
+        respond("Please specify a campaign name. Usage: `/campaign <campaign_name>`")
+        return
+
+    sf = get_salesforce_connection()
+    try:
+        query = f"""
+        SELECT Name, Status, StartDate, EndDate, ActualCost, 
+               AmountWonOpportunities, NumberOfLeads, NumberOfConvertedLeads, NumberOfOpportunities 
+        FROM Campaign WHERE Name LIKE '%{campaign_name}%'
+        LIMIT 3
+        """
+        records = sf.query(query).get('records', [])
+        if not records:
+            respond(f"No campaigns found matching '{campaign_name}'")
+            return
+
+        blocks = [{"type": "header", "text": {"type": "plain_text", "text": f"📊 Campaign Analytics: {campaign_name}"}}]
+        for c in records:
+            try:
+                roi = (float(c['AmountWonOpportunities'] or 0) - float(c['ActualCost'] or 0)) / max(float(c['ActualCost'] or 1), 1) * 100
+            except Exception:
+                roi = 0
+            try:
+                conv_rate = float(c['NumberOfConvertedLeads'] or 0) / max(float(c['NumberOfLeads'] or 1), 1) * 100
+            except Exception:
+                conv_rate = 0
+
+            blocks.append({
+                "type": "section",
+                "fields": [
+                    {"type": "mrkdwn", "text": f"*Campaign:* {c['Name']}"},
+                    {"type": "mrkdwn", "text": f"*Status:* {c.get('Status','')}\n*ROI:* {roi:.1f}%\n*Conversion Rate:* {conv_rate:.1f}%"},
+                    {"type": "mrkdwn", "text": f"*Cost:* ${c.get('ActualCost', 0):,.2f}\n*Won Revenue:* ${c.get('AmountWonOpportunities', 0):,.2f}"},
+                    {"type": "mrkdwn", "text": f"*Leads:* {c.get('NumberOfLeads',0)}\n*Opportunities:* {c.get('NumberOfOpportunities',0)}"}
+                ]
+            })
+            blocks.append({"type": "divider"})
+        respond(blocks=blocks)
+    except Exception as e:
+        respond(f"Error: {str(e)}")
