@@ -1,0 +1,28 @@
+@app.command("/dq-scan")
+def handle_dq_scan(ack, respond, command):
+    ack()
+    sf = get_salesforce_connection()
+    try:
+        # Example: check accounts
+        result = sf.query_all("""
+            SELECT Id, Name, Phone, BillingStreet, AnnualRevenue FROM Account LIMIT 500
+        """)
+        df = pd.DataFrame(result['records'])
+        issues = []
+        if 'Phone' in df: issues.append(f"Missing phones: {df['Phone'].isna().sum()}")
+        if 'BillingStreet' in df: issues.append(f"Missing addresses: {df['BillingStreet'].isna().sum()}")
+        if 'AnnualRevenue' in df:
+            revs = pd.to_numeric(df['AnnualRevenue'], errors='coerce').dropna()
+            z = np.abs(stats.zscore(revs))
+            issues.append(f"Outlier revenues: {(z>3).sum()}")
+
+        missing = sum(int(issue.split(':')[1]) for issue in issues if ':' in issue)
+        total = len(df)
+        score = int(100 - (missing/total)*100) if total>0 else 100
+        respond(f"""
+*Data Quality Scan:*\n
+{"".join([f"- {i}\n" for i in issues])}
+*Data Quality Score:* {score}%
+""")
+    except Exception as e:
+        respond(f"Error: {str(e)}")
