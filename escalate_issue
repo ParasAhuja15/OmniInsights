@@ -1,0 +1,6 @@
+@app.command("/escalate")
+def handle_escalate(ack, respond, command):
+    ack()
+    issue = command.get('text', '').strip()
+    # Log issue, route to support, notify in a specific Slack channel
+    respond(f"Your issue has been escalated to support: {issue}")
