@@ -1,0 +1,15 @@
+@app.command("/omni-help")
+def handle_omni_help(ack, respond, command):
+    ack()
+    respond({
+        "blocks": [
+            {"type": "header", "text": {"type":"plain_text", "text": "🤖 OmniInsights Help"}},
+            {"type": "section", "text": {"type": "mrkdwn", "text": (
+                "*Available Commands:*\n"
+                "• `/campaign <name>` - Get campaign analytics\n"
+                "• `/dq-scan` - Run a data quality scan\n"
+                "• `/omni-help` - Show this help message\n\n"
+                "See the [FAQ knowledge base](https://YOUR-KB-URL) | For escalations, type `/escalate`"
+            )}},
+        ]})
+#Replace YOUR-KB-URL with your knowledge base link
