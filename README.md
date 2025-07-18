@@ -88,20 +88,11 @@ omniinsights/
 - OAuth for Salesforce connection (Production: use Connected Apps, restrict profile scopes)
 - No sensitive data is logged or output to public channels
 
-## 📚 Knowledge Base
-
-For detailed user instructions, troubleshooting, and tips, visit:  
-[OmniInsights – Official User Guide](https://docs.google.com/document/d/yourkbdocid)
-
 ## 📝 License
 
 Distributed under the MIT License.  
 See `LICENSE` for more information.
 
-## 🙌 Contributors
-
-* [Your Name](https://github.com/yourname)
-* [Project Collaborators]
 
 ## 🔗 Roadmap & Extendability
 
@@ -110,8 +101,5 @@ See `LICENSE` for more information.
 - AI-powered summarization and recommendations
 
 **PRs welcome!**
-
-**Questions?**  
-Open an issue here or reach out on Slack.
 
 *OmniInsights – Empowering your business with analytics & answers, right where your team works.*
